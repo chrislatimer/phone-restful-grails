@@ -41,6 +41,14 @@ class PhoneControllerTests extends Specification {
             response.status == 200
     }
 
+    void "Request to /phones produces a json status value of 'ok'"() {
+        when:
+            controller.index()
+
+        then:
+            response.json?.status == "ok"
+    }
+
     void "Response produces json content type"() {
         when:
             controller.index()
@@ -74,6 +82,15 @@ class PhoneControllerTests extends Specification {
 
         then:
             response.status == 401
+    }
+
+    void "Invalid requests should produce a status of 'error'"() {
+        when:
+            params.offset = 'QPR'
+            controller.index()
+
+        then:
+            response.json?.status == "error"
     }
 
     void "No params should return a list of phones"() {
@@ -129,7 +146,7 @@ class PhoneControllerTests extends Specification {
             }
     }
 
-    void "Each phones self link should match the RESTful pattern /phones/id"() {
+    void "Each phone's self link should match the RESTful pattern /phones/id"() {
         when:
             controller.index()
 

@@ -13,20 +13,21 @@ class PhoneControllerTests extends Specification {
 
     def setup() {
         Manufacturer samsung = new Manufacturer(name:"Samsung")
-        samsung.addToProducts(new Phone(name:"Galaxy S4"))
-        samsung.addToProducts(new Phone(name:"Galaxy S3"))
+        Phone galaxyS4 = new Phone(name:"Galaxy S4")
+        galaxyS4.addToProductVariations([baseVariation: true, listPrice: 599.00, salePrice: 549.00])
+        samsung.addToProducts(galaxyS4)
+        Phone galaxyS3 = new Phone(name:"Galaxy S3")
+        galaxyS3.addToProductVariations([baseVariation: true, listPrice: 399.00, salePrice: 349.00])
+        samsung.addToProducts(galaxyS3)
         samsung.save(failOnError: true)
 
         Manufacturer apple = new Manufacturer(name: "Apple")
         Phone iPhone5s = new Phone(name:"iPhone 5s")
-        iPhone5s.addToProductVariations([baseVariant: true, label: "16GB", listPrice: 648.00, salePrice: 648.00])
-        iPhone5s.addToProductVariations([baseVariant: true, label: "32GB", listPrice: 748.00, salePrice: 748.00])
-        iPhone5s.addToProductVariations([baseVariant: true, label: "64GB", listPrice: 848.00, salePrice: 848.00])
+        iPhone5s.addToProductVariations([baseVariation: true, label: "16GB", listPrice: 648.00, salePrice: 648.00])
+        iPhone5s.addToProductVariations([baseVariation: false, label: "32GB", listPrice: 748.00, salePrice: 748.00])
+        iPhone5s.addToProductVariations([baseVariation: false, label: "64GB", listPrice: 848.00, salePrice: 848.00])
         apple.addToProducts(iPhone5s)
         apple.save(failOnError: true)
-
-        Manufacturer htc = new Manufacturer(name: "HTC")
-        htc.save(failOnError: true)
     }
 
     def cleanup() {
@@ -122,23 +123,45 @@ class PhoneControllerTests extends Specification {
         then:
             response.json?.phones?.size() > 0
             response.json?.phones?.each {
-                assert it.links?.find {
+            assert it.links?.find {
                     it.rel == "self"
                 }
             }
     }
 
     void "Each phones self link should match the RESTful pattern /phones/id"() {
-            when:
-                controller.index()
+        when:
+            controller.index()
 
-            then:
-                response.json?.phones?.size() > 0
-                response.json?.phones?.each {
-                    def selfLink = it.links?.find {
-                        it.rel == "self"
-                    }
-                    assert selfLink.url.endsWith("/phones/${it.id}")
-                }
+        then:
+            response.json?.phones?.size() > 0
+            response.json?.phones?.each {
+            def selfLink = it.links?.find {
+                it.rel == "self"
+            }
+            assert selfLink.url.endsWith("/phones/${it.id}")
         }
+    }
+
+    void "Each phone should have at least one variation"() {
+        when:
+            controller.index()
+
+        then:
+            response.json.phones?.size() > 0
+            response.json.phones?.each {
+                assert it.variations?.size() > 0
+            }
+    }
+
+    void "Each phone should have exactly one base variation"() {
+        when:
+            controller.index()
+
+        then:
+            response.json.phones?.size() > 0
+            response.json.phones?.each {
+                assert it.variations.findAll { it.baseVariation as Boolean }.size() == 1
+            }
+    }
 }

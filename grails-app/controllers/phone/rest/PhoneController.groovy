@@ -22,6 +22,10 @@ class PhoneController {
                 phone.id = it.id
                 phone.name = it.name
                 phone.links = [[rel:"self", url:createLink(controller:"phone", action:"show", id:it.id)]]
+                phone.variations = []
+                it.productVariations.each {
+                    phone.variations << [baseVariation:it.baseVariation, label:it.label, listPrice:it.listPrice, salePrice:it.salePrice]
+                }
                 json.phones << phone
             }
         }

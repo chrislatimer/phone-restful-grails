@@ -1,6 +1,6 @@
 package phone.rest
 
-class Phone {
+class Phone extends Product {
 
     static constraints = {
     }

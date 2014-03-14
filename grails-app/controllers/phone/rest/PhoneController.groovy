@@ -14,6 +14,13 @@ class PhoneController {
                 json.errors << "Rejected value ${it.rejectedValue} for field ${it.field}"
             }
         }
+        else {
+            def phones = Phone.list(max:params?.max ?: 10, offset:params?.offset ?: 0)
+            json.phones = []
+            phones.each {
+                json.phones << [name:it.name]
+            }
+        }
         render(contentType: 'application/json') {
             json
         }

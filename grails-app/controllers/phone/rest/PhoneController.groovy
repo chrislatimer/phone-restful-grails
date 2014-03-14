@@ -19,8 +19,9 @@ class PhoneController {
             json.phones = []
             phones.each {
                 def phone = [:]
+                phone.id = it.id
                 phone.name = it.name
-                phone.links = [[rel:"self", url:createLink(controller:'phone', action:'show', id: it.id)]]
+                phone.links = [[rel:"self", url:createLink(controller:"phone", action:"show", id:it.id)]]
                 json.phones << phone
             }
         }

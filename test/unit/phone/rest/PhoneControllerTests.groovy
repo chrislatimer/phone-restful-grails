@@ -104,6 +104,17 @@ class PhoneControllerTests extends Specification {
             }
     }
 
+    void "Phones should have an id attribute"() {
+        when:
+            controller.index()
+
+        then:
+            response.json?.phones?.size() > 0
+            response.json?.phones?.each {
+                assert it.id
+            }
+    }
+
     void "Phones should have a self link"() {
         when:
             controller.index()
@@ -117,4 +128,17 @@ class PhoneControllerTests extends Specification {
             }
     }
 
+    void "Each phones self link should match the RESTful pattern /phones/id"() {
+            when:
+                controller.index()
+
+            then:
+                response.json?.phones?.size() > 0
+                response.json?.phones?.each {
+                    def selfLink = it.links?.find {
+                        it.rel == "self"
+                    }
+                    assert selfLink.url.endsWith("/phones/${it.id}")
+                }
+        }
 }

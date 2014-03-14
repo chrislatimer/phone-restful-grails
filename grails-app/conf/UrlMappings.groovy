@@ -8,7 +8,7 @@ class UrlMappings {
         }
 
         "/phones/$id"{
-            productType="phone"
+            [controller: "phone", action:"show"]
         }
 
         "/"(view:"/index")

@@ -18,11 +18,18 @@ class PhoneController {
             def phones = Phone.list(max:params?.max ?: 10, offset:params?.offset ?: 0)
             json.phones = []
             phones.each {
-                json.phones << [name:it.name]
+                def phone = [:]
+                phone.name = it.name
+                phone.links = [[rel:"self", url:createLink(controller:'phone', action:'show', id: it.id)]]
+                json.phones << phone
             }
         }
         render(contentType: 'application/json') {
             json
         }
+    }
+
+    def show(Integer id) {
+
     }
 }

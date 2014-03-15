@@ -44,11 +44,21 @@ class PhoneController {
         }
     }
 
-    def show(Integer id) {
+    def show(Long id) {
         def json = [:]
         try {
             def phone = Phone.get(id)
-            if(!phone) {
+            if(phone) {
+                json.id = phone.id
+                json.name = phone.name
+                json.links = [[rel:"self", url:createLink(controller:"phone", action:"show", id:phone.id)]]
+                json.variations = []
+                phone.productVariations.each {
+                    json.variations << [baseVariation:it.baseVariation, label:it.label, listPrice:it.listPrice, salePrice:it.salePrice]
+                }
+                json.status = "ok"
+            }
+            else {
                 response.status = 404
                 json.status = "error"
             }

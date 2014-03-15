@@ -188,4 +188,48 @@ class PhoneControllerTests extends Specification {
         then:
             response.status == 404
     }
+
+    void "A phone should have an id"() {
+        given:
+            def phone = Phone.list(max:1)[0]
+
+        when:
+            controller.show(phone.id)
+
+        then:
+            response.json.id
+    }
+
+    void "A phone should have a name"() {
+        given:
+        def phone = Phone.list(max:1)[0]
+
+        when:
+        controller.show(phone.id)
+
+        then:
+        response.json.name
+    }
+
+    void "A phone should have a self link"() {
+        given:
+        def phone = Phone.list(max:1)[0]
+
+        when:
+        controller.show(phone.id)
+
+        then:
+        response.json.links?.find{ it.rel == "self" }
+    }
+
+    void "A phone should have at least one variation"() {
+        given:
+        def phone = Phone.list(max:1)[0]
+
+        when:
+        controller.show(phone.id)
+
+        then:
+        response.json.variations?.size() > 0
+    }
 }

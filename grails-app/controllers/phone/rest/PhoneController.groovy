@@ -45,6 +45,22 @@ class PhoneController {
     }
 
     def show(Integer id) {
-
+        def json = [:]
+        try {
+            def phone = Phone.get(id)
+            if(!phone) {
+                response.status = 404
+                json.status = "error"
+            }
+        }
+        catch (Exception e) {
+            response.status = 500
+            json.status = "error"
+            json.errors = ["${e.class}: ${e.message}"]
+            log.error("Unexpected error thrown in index() action of PhoneController, incoming params were ${params}", e)
+        }
+        render(contentType: 'application/json') {
+            json
+        }
     }
 }

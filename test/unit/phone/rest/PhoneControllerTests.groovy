@@ -181,4 +181,11 @@ class PhoneControllerTests extends Specification {
                 assert it.variations.findAll { it.baseVariation as Boolean }.size() == 1
             }
     }
+
+    void "When retrieving a phone that doesn't exist it should return a 404"() {
+        when:
+            controller.show(4444)
+        then:
+            response.status == 404
+    }
 }

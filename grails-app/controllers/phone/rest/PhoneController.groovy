@@ -7,8 +7,7 @@ class PhoneController {
     def index(ListCommand listCmd) {
         def json = [:]
         if(listCmd.hasErrors()) {
-            response.status = 401
-            json.status = "error"
+            response.status = 400
             json.errors = []
             listCmd.errors.fieldErrors.each {
                 log.debug("Rejected value ${it.rejectedValue} for field ${it.field}")
@@ -30,11 +29,9 @@ class PhoneController {
                     }
                     json.phones << phone
                 }
-                json.status = "ok"
             }
             catch(Exception e) {
                 response.status = 500
-                json.status = "error"
                 json.errors = ["${e.class}: ${e.message}"]
                 log.error("Unexpected error thrown in index() action of PhoneController, incoming params were ${params}", e)
             }
@@ -56,16 +53,14 @@ class PhoneController {
                 phone.productVariations.each {
                     json.variations << [baseVariation:it.baseVariation, label:it.label, listPrice:it.listPrice, salePrice:it.salePrice]
                 }
-                json.status = "ok"
             }
             else {
                 response.status = 404
-                json.status = "error"
+                json.errors = ["/phones/${id} not found"]
             }
         }
         catch (Exception e) {
             response.status = 500
-            json.status = "error"
             json.errors = ["${e.class}: ${e.message}"]
             log.error("Unexpected error thrown in index() action of PhoneController, incoming params were ${params}", e)
         }

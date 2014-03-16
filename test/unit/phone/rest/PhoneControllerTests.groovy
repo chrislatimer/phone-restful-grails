@@ -41,14 +41,6 @@ class PhoneControllerTests extends Specification {
             response.status == 200
     }
 
-    void "Request to /phones produces a json status value of 'ok'"() {
-        when:
-            controller.index()
-
-        then:
-            response.json?.status == "ok"
-    }
-
     void "Response produces json content type"() {
         when:
             controller.index()
@@ -57,13 +49,13 @@ class PhoneControllerTests extends Specification {
             response.contentType ==~ /${JSON_CONTENT_TYPE}.*/
     }
 
-    void "Invalid max value produces 401"() {
+    void "Invalid max value produces 400"() {
         when:
             params.max = 'QPR'
             controller.index()
 
         then:
-            response.status == 401
+            response.status == 400
     }
 
     void "Invalid max value produces json errors"() {
@@ -75,23 +67,15 @@ class PhoneControllerTests extends Specification {
             response.json?.errors?.size() == 1
     }
 
-    void "Invalid offset value produces 401"() {
+    void "Invalid offset value produces 400"() {
         when:
             params.offset = 'QPR'
             controller.index()
 
         then:
-            response.status == 401
+            response.status == 400
     }
 
-    void "Invalid requests should produce a status of 'error'"() {
-        when:
-            params.offset = 'QPR'
-            controller.index()
-
-        then:
-            response.json?.status == "error"
-    }
 
     void "No params should return a list of phones"() {
         when:

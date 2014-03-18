@@ -140,7 +140,7 @@ class PhoneControllerTests extends Specification {
             def selfLink = it.links?.find {
                 it.rel == "self"
             }
-            assert selfLink.url.endsWith("/phones/${it.id}")
+            assert selfLink.uri.endsWith("/phones/${it.id}")
         }
     }
 

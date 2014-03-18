@@ -22,7 +22,7 @@ class PhoneController {
                     def phone = [:]
                     phone.id = it.id
                     phone.name = it.name
-                    phone.links = [[rel:"self", url:createLink(controller:"phone", action:"show", id:it.id)]]
+                    phone.links = [[rel:"self", uri:createLink(controller:"phone", action:"show", id:it.id)]]
                     phone.variations = []
                     it.productVariations.each {
                         phone.variations << [baseVariation:it.baseVariation, label:it.label, listPrice:it.listPrice, salePrice:it.salePrice]
@@ -48,7 +48,7 @@ class PhoneController {
             if(phone) {
                 json.id = phone.id
                 json.name = phone.name
-                json.links = [[rel:"self", url:createLink(controller:"phone", action:"show", id:phone.id)]]
+                json.links = [[rel:"self", uri:createLink(controller:"phone", action:"show", id:phone.id)]]
                 json.variations = []
                 phone.productVariations.each {
                     json.variations << [baseVariation:it.baseVariation, label:it.label, listPrice:it.listPrice, salePrice:it.salePrice]

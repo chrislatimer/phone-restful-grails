@@ -6,6 +6,8 @@ import phone.rest.ProductVariation
 class BootStrap {
 
     def init = { servletContext ->
+
+
         if(Environment.TEST != Environment.current) {
             Random random = new Random()
             def phonePrefix = ["Mega", "Giga", "Xtreme", "Galactic", "Nano", "Plutonium", "Crypto", "Edge"]

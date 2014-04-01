@@ -8,9 +8,8 @@ import phone.rest.ProductVariation
 /**
  * Created by chris on 3/17/14.
  */
-class PhoneMarshallerJson extends ClosureObjectMarshaller<JSON> {
-
-    static final marshal = { Phone phone ->
+class PhoneMarshallerJson extends NamedMarshallerJson {
+    static final Closure marshal = { Phone phone ->
         def json = [:]
         json.id = phone.id
         json.name = phone.name
@@ -32,5 +31,4 @@ class PhoneMarshallerJson extends ClosureObjectMarshaller<JSON> {
     public PhoneMarshallerJson() {
         super(Phone, marshal)
     }
-
 }

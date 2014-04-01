@@ -1,20 +1,24 @@
 import grails.converters.JSON
 import grails.converters.XML
 import org.codehaus.groovy.grails.web.converters.configuration.ObjectMarshallerRegisterer
+import phone.rest.marshaller.NamedMarshallerJson
+import phone.rest.marshaller.NamedMarshallerXml
 import phone.rest.marshaller.PhoneMarshallerJson
+import phone.rest.marshaller.PhoneMarshallerJsonCompact
 import phone.rest.marshaller.PhoneMarshallerXml
+import phone.rest.marshaller.configure.NamedMarshallerInitializer
 
 // Place your Spring DSL code here
 beans = {
-    customPhoneJsonMarshaller(ObjectMarshallerRegisterer) {
-        marshaller = new PhoneMarshallerJson()
-        converterClass = JSON
-        priority = 1
+    customPhoneJsonMarshaller(PhoneMarshallerJson) {
+        name = "complete"
     }
 
-    customPhoneXmlMarshaller(ObjectMarshallerRegisterer) {
-        marshaller = new PhoneMarshallerXml()
-        converterClass = XML
-        priority = 1
+    customPhoneJsonMarshallerCompact(PhoneMarshallerJsonCompact) {
+        name = "compact"
+    }
+
+    customPhoneXmlMarshaller(PhoneMarshallerXml) {
+        name = "complete"
     }
 }

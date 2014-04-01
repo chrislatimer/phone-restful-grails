@@ -1,12 +1,16 @@
+import grails.converters.JSON
 import grails.util.Environment
 import phone.rest.Manufacturer
+import phone.rest.MarshallerInitializerService
 import phone.rest.Phone
 import phone.rest.ProductVariation
 
 class BootStrap {
 
-    def init = { servletContext ->
+    MarshallerInitializerService marshallerInitializerService
 
+    def init = { servletContext ->
+        marshallerInitializerService.initialize()
 
         if(Environment.TEST != Environment.current) {
             Random random = new Random()

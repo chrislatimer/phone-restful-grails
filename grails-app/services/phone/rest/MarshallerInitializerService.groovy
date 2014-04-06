@@ -3,27 +3,18 @@ package phone.rest
 import grails.converters.JSON
 import grails.converters.XML
 import grails.transaction.Transactional
-import org.codehaus.groovy.grails.web.converters.Converter
 import org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder
 import org.codehaus.groovy.grails.web.converters.configuration.DefaultConverterConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
-import phone.rest.marshaller.NamedMarshaller
 import phone.rest.marshaller.NamedMarshallerJson
 import phone.rest.marshaller.NamedMarshallerXml
 
-import javax.annotation.PostConstruct
 
 @Transactional
 class MarshallerInitializerService implements ApplicationContextAware {
 
     ApplicationContext applicationContext
-
-    @PostConstruct
-    public void initialize() {
-        registerNamedJsonMarshallers()
-        registerNamedXmlMarshallers()
-    }
 
     protected registerNamedJsonMarshallers() {
         for (Object o : applicationContext.getBeansOfType(NamedMarshallerJson.class).values()) {

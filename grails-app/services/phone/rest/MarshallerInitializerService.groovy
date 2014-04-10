@@ -16,6 +16,11 @@ class MarshallerInitializerService implements ApplicationContextAware {
 
     ApplicationContext applicationContext
 
+    public void initialize() {
+        registerNamedJsonMarshallers()
+        registerNamedXmlMarshallers()
+    }
+
     protected registerNamedJsonMarshallers() {
         for (Object o : applicationContext.getBeansOfType(NamedMarshallerJson.class).values()) {
             def c = ConvertersConfigurationHolder.getConverterConfiguration(JSON.class)

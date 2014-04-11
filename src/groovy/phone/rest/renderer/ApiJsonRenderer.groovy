@@ -9,9 +9,9 @@ import org.codehaus.groovy.grails.web.mime.MimeType
 /**
  * Created by chris on 4/5/14.
  */
-class ApiRenderer<T> extends AbstractRenderer<T> {
+class ApiJsonRenderer<T> extends AbstractRenderer<T> {
 
-    public ApiRenderer(Class<T> targetClass) {
+    public ApiJsonRenderer(Class<T> targetClass) {
         super(targetClass, MimeType.JSON);
     }
 
@@ -19,14 +19,12 @@ class ApiRenderer<T> extends AbstractRenderer<T> {
     void render(T object, RenderContext context) {
         context.setContentType(GrailsWebUtil.getContentType(MimeType.JSON.name, GrailsWebUtil.DEFAULT_ENCODING))
         JSON converter
-        if(context.arguments?.detail) {
-            JSON.use(context.arguments?.detail) {
-                converter = object as JSON
-            }
-        }
-        else {
+        def detail = context.arguments?.detail ?: "compact"
+
+        JSON.use(detail) {
             converter = object as JSON
         }
+
         converter.render(context.getWriter())
     }
 }

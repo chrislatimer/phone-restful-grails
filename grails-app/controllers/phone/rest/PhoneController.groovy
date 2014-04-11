@@ -12,8 +12,17 @@ class PhoneController extends RestfulController {
     }
 
     def index() {
-        params.max = Math.min(max ?: 10, 100)
-        respond Phone.list(params), model:[phoneCount: Phone.count()]
+        params.max = Math.min(params.max ?: 10, 100)
+        withFormat {
+            json {
+                respond Phone.list(params), [detail:"complete", model:[phoneCount: Phone.count()]]
+            }
+            xml {
+                XML.use(params?.detail?.toLowerCase() ?: "complete") {
+                    respond phone
+                }
+            }
+        }
     }
 
     def show(Phone phone) {

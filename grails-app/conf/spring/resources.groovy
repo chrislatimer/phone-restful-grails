@@ -8,7 +8,9 @@ import phone.rest.marshaller.PhoneMarshallerJson
 import phone.rest.marshaller.PhoneMarshallerJsonCompact
 import phone.rest.marshaller.PhoneMarshallerXml
 import phone.rest.marshaller.configure.NamedMarshallerInitializer
-import phone.rest.renderer.ApiRenderer
+import phone.rest.renderer.ApiJsonCollectionRenderer
+import phone.rest.renderer.ApiJsonRenderer
+import phone.rest.renderer.ApiJsonRenderer
 
 // Place your Spring DSL code here
 beans = {
@@ -24,5 +26,6 @@ beans = {
         name = "complete"
     }
 
-    phoneRenderer(ApiRenderer, Phone)
+    phoneRenderer(ApiJsonRenderer, Phone)
+    phoneCollectionRenderer(ApiJsonCollectionRenderer, Phone)
 }

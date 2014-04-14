@@ -2,6 +2,7 @@ import grails.converters.JSON
 import grails.converters.XML
 import org.codehaus.groovy.grails.web.converters.configuration.ObjectMarshallerRegisterer
 import phone.rest.Phone
+import phone.rest.marshaller.ManufacturerMarshallerJsonCompact
 import phone.rest.marshaller.NamedMarshallerJson
 import phone.rest.marshaller.NamedMarshallerXml
 import phone.rest.marshaller.PhoneMarshallerJson
@@ -26,6 +27,21 @@ beans = {
         name = "complete"
     }
 
-    phoneRenderer(ApiJsonRenderer, Phone)
-    phoneCollectionRenderer(ApiJsonCollectionRenderer, Phone)
+    customManufacturerMarshallerCompact(ManufacturerMarshallerJsonCompact) {
+        name = "compact"
+    }
+
+    // currently our Manufacturer class is exceedingly simple so no need
+    // for another marshaller
+    customManufacturerMarshaller(ManufacturerMarshallerJsonCompact) {
+        name = "complete"
+    }
+
+    phoneRenderer(ApiJsonRenderer, Phone) {
+        label = "phone"
+    }
+
+    phoneCollectionRenderer(ApiJsonCollectionRenderer, Phone) {
+        label = "phones"
+    }
 }

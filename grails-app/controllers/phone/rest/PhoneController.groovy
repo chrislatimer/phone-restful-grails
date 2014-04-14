@@ -13,12 +13,17 @@ class PhoneController extends RestfulController {
 
     def index() {
         params.max = Math.min(params.max ?: 10, 100)
+        def offset = params.offset ?: 0
+        def detail = params?.detail?.toLowerCase() == "compact" ? "compact" : "complete"
         withFormat {
             json {
-                respond Phone.list(params), [detail:"complete", model:[phoneCount: Phone.count()]]
+                respond Phone.list(params), [detail:detail,
+                                             meta:[totalCount: Phone.count(),
+                                                   currentMax: params.max,
+                                                   curentOffset:offset]]
             }
             xml {
-                XML.use(params?.detail?.toLowerCase() ?: "complete") {
+                XML.use(detail) {
                     respond phone
                 }
             }

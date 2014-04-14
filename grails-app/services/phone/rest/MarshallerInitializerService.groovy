@@ -22,20 +22,28 @@ class MarshallerInitializerService implements ApplicationContextAware {
     }
 
     protected registerNamedJsonMarshallers() {
+        def configs = [:]
         for (Object o : applicationContext.getBeansOfType(NamedMarshallerJson.class).values()) {
             def c = ConvertersConfigurationHolder.getConverterConfiguration(JSON.class)
-            DefaultConverterConfiguration<JSON> cfg = new DefaultConverterConfiguration<JSON>(c)
             NamedMarshallerJson namedMarshaller = (NamedMarshallerJson) o
+            if(!configs[namedMarshaller.name]) {
+                configs[namedMarshaller.name] = new DefaultConverterConfiguration<JSON>(c)
+            }
+            DefaultConverterConfiguration<JSON> cfg = configs[namedMarshaller.name]
             cfg.registerObjectMarshaller(namedMarshaller.marshaller)
             ConvertersConfigurationHolder.setNamedConverterConfiguration(JSON.class, namedMarshaller.name, cfg);
         }
     }
 
     protected registerNamedXmlMarshallers() {
+        def configs = [:]
         for (Object o : applicationContext.getBeansOfType(NamedMarshallerXml.class).values()) {
             def c = ConvertersConfigurationHolder.getConverterConfiguration(XML.class)
-            DefaultConverterConfiguration<XML> cfg = new DefaultConverterConfiguration<XML>(c)
             NamedMarshallerXml namedMarshaller = (NamedMarshallerXml) o
+            if(!configs[namedMarshaller.name]) {
+                configs[namedMarshaller.name] = new DefaultConverterConfiguration<XML>(c)
+            }
+            DefaultConverterConfiguration<XML> cfg = configs[namedMarshaller.name]
             cfg.registerObjectMarshaller(namedMarshaller.marshaller)
             ConvertersConfigurationHolder.setNamedConverterConfiguration(XML.class, namedMarshaller.name, cfg)
         }

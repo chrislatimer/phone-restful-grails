@@ -32,16 +32,35 @@ class ApiJsonRenderer<T> extends AbstractRenderer<T> {
 
         JSON.use(detail) {
             converter = object as ApiJSON
+            writer.object()
+            writer.key(getLabel())
+            converter.renderPartial(writer)
         }
 
-        writer.object()
-        writer.key(getLabel())
-        converter.renderPartial(writer)
+
 
         if(context.arguments?.meta) {
             writer.key("meta")
             converter = context.arguments.meta as ApiJSON
             converter.renderPartial(writer)
+        }
+
+        if(context.arguments?.include) {
+            writer.key("include")
+            writer.array()
+            context.arguments?.include.each { includeProp ->
+                JSON.use("compact") {
+                    converter = object.properties.get(includeProp) as ApiJSON
+                }
+
+
+                writer.object()
+                writer.key(includeProp)
+                converter.renderPartial(writer)
+                writer.endObject()
+
+            }
+            writer.endArray()
         }
 
         writer.endObject()

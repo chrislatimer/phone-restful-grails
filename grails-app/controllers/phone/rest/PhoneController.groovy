@@ -15,6 +15,7 @@ class PhoneController extends RestfulController {
         params.max = Math.min(params.max ?: 10, 100)
         def offset = params.offset ?: 0
         def detail = params?.detail?.toLowerCase() == "compact" ? "compact" : "complete"
+        println params?.list('include')
         withFormat {
             json {
                 respond Phone.list(params), [detail:detail,
@@ -31,13 +32,13 @@ class PhoneController extends RestfulController {
     }
 
     def show(Phone phone) {
-        def detail = params.detail ?: "complete"
+        def detail = params?.detail?.toLowerCase() == "compact" ? "compact" : "complete"
         withFormat {
             json {
-                respond(phone, [detail:detail])
+                respond(phone, [detail:detail, include:params?.list('include')])
             }
             xml {
-                XML.use(params?.detail?.toLowerCase() ?: "complete") {
+                XML.use(detail) {
                     respond phone
                 }
             }
